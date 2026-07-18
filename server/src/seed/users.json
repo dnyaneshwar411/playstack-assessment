@@ -1,0 +1,26 @@
+{
+  "tina19@yahoo.com": {
+    "name": "Michelle Dickens",
+    "role": "Super Admin",
+    "password": "muyaxisoju",
+    "email": "tina19@yahoo.com"
+  },
+  "inez_mitchell@hotmail.com": {
+    "name": "Dewey Lynch",
+    "role": "Employee",
+    "password": "peyuyiwezi",
+    "email": "inez_mitchell@hotmail.com"
+  },
+  "alberto.jast14@hotmail.com": {
+    "name": "Max Brekke",
+    "role": "Employee",
+    "password": "bumipibuna",
+    "email": "alberto.jast14@hotmail.com"
+  },
+  "lina_prohaska@gmail.com": {
+    "name": "Loma Hessel",
+    "role": "Employee",
+    "password": "pecasezona",
+    "email": "lina_prohaska@gmail.com"
+  }
+}

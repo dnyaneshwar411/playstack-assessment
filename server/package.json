@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
-    "seed": "tsx seed/index.ts",
+    "seed": "tsx src/seed/index.ts",
     "clean": "rm -rf dist",
     "build": "pnpm run clean && esbuild src/index.ts src/workers/init.ts --bundle --platform=node --target=node24 --outdir=dist --outbase=src"
   },
@@ -22,8 +22,11 @@
   },
   "type": "module",
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@types/express": "^5.0.6",
+    "@types/minimist": "^1.2.5",
     "@types/node": "^26.1.1",
+    "minimist": "^1.2.8",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   },
