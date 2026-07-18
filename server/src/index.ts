@@ -22,7 +22,7 @@ mongoose
     process.exit(1);
   });
 
-const exitHandler = function() {
+const exitHandler = function () {
   if (server) {
     server.close(() => {
       console.log("server close");

@@ -18,6 +18,8 @@ const envSchema = zod.object({
   MONGOOSE_MIN_POOL_SIZE: zod.coerce.number(),
 
   JWT_SECRET_TOKEN: zod.string(),
+  JWT_ACCESS_EXPIRATION: zod.coerce.number(),
+  JWT_REFRESH_EXPIRATION: zod.coerce.number(),
 });
 
 const validateEnv = function() {
