@@ -50,7 +50,8 @@ export default class UserController {
 
   static organizationTree = catchAsync(
     async function (req: Request, res: Response) {
-      const data = await UserService.buildOrganizationTree()
+      const { depth = "1", node } = req.query as { depth: string, node: string };
+      const data = await UserService.buildOrganizationTree(node, parseInt(depth))
       res.status(httpStatus.OK).json({ code: httpStatus.OK, data })
     }
   )
@@ -65,8 +66,16 @@ export default class UserController {
 
   static assignReportingManager = catchAsync(
     async function (req: Request, res: Response) {
-      const { userId } = req.params
-      await UserService.assignReportingManager(userId as string, req.body.reportingManager)
+      const { userId } = req.params;
+      if (req.body.reportingManager === userId) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, "An employee cannot be assigned to report to themselves.")
+      }
+
+      const { success, message } = await UserService.assignReportingManager(userId as string, req.body.reportingManager)
+      if (!success) {
+        throw new ApiError(httpStatus.BAD_REQUEST, message)
+      }
+
       res.status(httpStatus.OK).json({ code: httpStatus.OK, message: "Successfully" })
     }
   )

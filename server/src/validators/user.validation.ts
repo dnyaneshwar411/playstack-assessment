@@ -96,4 +96,11 @@ export default class UserValidation {
       )
     })
   })
+
+  static organizationTree = z.object({
+    query: z.object({
+      depth: z.coerce.number().max(20).min(1).default(1),
+      node: z.string().regex(this.objectIdRegex, "Invalid database identifier")
+    })
+  })
 }

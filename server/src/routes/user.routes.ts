@@ -30,7 +30,7 @@ userRoutes
 
 userRoutes
   .route("/organization/tree")
-  .post(hasAccess([]), UserController.organizationTree);
+  .get(validate(UserValidation.organizationTree), hasAccess([]), UserController.organizationTree);
 
 userRoutes
   .route("/:userId/subordinates")

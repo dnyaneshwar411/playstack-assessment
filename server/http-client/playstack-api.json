@@ -1,0 +1,286 @@
+{
+  "info": {
+    "name": "Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "id": "b2839ea9-27e2-46f0-b8e6-91ef4d069b0f",
+      "name": "auth",
+      "item": [
+        {
+          "id": "7c5081d5-7cac-4fab-9ec0-d52ec3069de2",
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/auth/login",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"sarah.jenkins@company.com\",\"password\":\"123456\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "75489e73-7d0c-49e2-8e10-a78b40f677df",
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/auth/logout",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"john.doe@company.com\",\"password\":\"1234566\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "50bdc30b-e76d-486d-8a52-95e93c15e55f",
+      "name": "users",
+      "item": [
+        {
+          "id": "a94229cd-5fe9-4b42-9f98-2b2fc66d2b3f",
+          "name": "direct reports get",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/6a59dcf7028ca790503805a9/subordinates",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "6a59dcf7028ca790503805a9",
+                "subordinates"
+              ]
+            }
+          }
+        },
+        {
+          "id": "3361c0df-24f2-4864-8212-9252ba7d27c3",
+          "name": "get user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/employees",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "employees"
+              ]
+            }
+          }
+        },
+        {
+          "id": "b396e3c0-0d72-4333-98fe-dd4470576a04",
+          "name": "register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/employees",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "employees"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Alex Mercer\",\"email\":\"hr@company.com\",\"mobileNumber\":9876543210,\"password\":\"123456\",\"role\":\"Super Admin\",\"department\":\"Employee\",\"designation\":\"Software Engineer\",\"salary\":85000,\"status\":\"Active\",\"joiningDate\":\"2026-07-18T00:00:00.000Z\",\"avatar\":{\"private\":false,\"key\":\"uploads/avatars/alex-mercer-profile.jpg\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "5db5f1db-741b-4265-8ad3-a91e9b791948",
+          "name": "remove user",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/employees/6a59dcf7028ca790503805a8",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "employees",
+                "6a59dcf7028ca790503805a8"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Alex Mercer\",\"email\":\"john.doe@company.com\",\"mobileNumber\":9876543210,\"role\":\"Employee\",\"department\":\"Employee\",\"designation\":\"Software Engineer\",\"salary\":85000,\"status\":\"Active\",\"joiningDate\":\"2026-07-18T00:00:00.000Z\",\"avatar\":{\"private\":false,\"key\":\"uploads/avatars/alex-mercer-profile.jpg\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "811b9a68-ecaf-4c1c-935e-5506a5a58b1e",
+          "name": "update user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/employees/6a59dcf7028ca790503805a8",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "employees",
+                "6a59dcf7028ca790503805a8"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Alex Mercer\",\"email\":\"john.doe@company.com\",\"mobileNumber\":9876543210,\"role\":\"Employee\",\"department\":\"Employee\",\"designation\":\"Software Engineer\",\"salary\":85000,\"status\":\"Active\",\"joiningDate\":\"2026-07-18T00:00:00.000Z\",\"avatar\":{\"private\":false,\"key\":\"uploads/avatars/alex-mercer-profile.jpg\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "ee43cbac-1d3b-4143-a6ed-90541459d8c3",
+          "name": "update user scopes",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/6a5b1d5e717a1c9c0b749959/roles",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "6a5b1d5e717a1c9c0b749959",
+                "roles"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"scopeMap\":{\"user:read:all\":false}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "d8c0d5d6-c66a-43da-82cc-681a70f6c30a",
+          "name": "organization tree",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/organization/tree?node=65cb00014f1a2b3c4d5e6f01&depth=20",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "organization",
+                "tree"
+              ],
+              "query": [
+                {
+                  "key": "node",
+                  "value": "65cb00014f1a2b3c4d5e6f01"
+                },
+                {
+                  "key": "depth",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "aac0acd4-5e64-41bf-b5ab-0392374ea1c2",
+          "name": "update reporting manager",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/65cb00024f1a2b3c4d5e6f02/manager",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "65cb00024f1a2b3c4d5e6f02",
+                "manager"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reportingManager\":\"65cb00014f1a2b3c4d5e6f01\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "LOCAL",
+      "value": "http://localhost:1993/api/v1",
+      "type": "string"
+    }
+  ]
+}

@@ -6,6 +6,17 @@ import { hashString, validateHash } from "../utils/hash.js";
 import TokenService from "./token.service.js";
 import type UserValidation from "../validators/user.validation.js";
 import ScopeService from "./scope.service.js";
+import { Types } from "mongoose";
+
+type OrgTreeNode = {
+  _id: string;
+  name?: string;
+  email: string;
+  designation?: string;
+  department: string;
+  avatar?: any;
+  children: OrgTreeNode[];
+}
 
 export default class UserService {
   private static model = User;
@@ -91,11 +102,60 @@ export default class UserService {
     ])
   }
 
-  static async buildOrganizationTree() {
-    // tbd needs a little bit more than this should be recursive
-    return await this.model.find({
+  static async buildOrganizationTree(rootId: string, maxDepth: number = Infinity): Promise<any[]> {
+    const tree = await this.model.aggregate([
+      { $match: { _id: new Types.ObjectId(rootId), status: "Active" } },
 
-    })
+      {
+        $graphLookup: {
+          from: "users",
+          startWith: "$_id",
+          connectFromField: "_id",
+          connectToField: "reportingManager",
+          as: "descendants",
+          maxDepth: maxDepth - 1,
+          depthField: "level"
+        }
+      },
+
+      {
+        $project: {
+          name: 1, email: 1, designation: 1, department: 1, avatar: 1,
+          "descendants._id": 1,
+          "descendants.name": 1,
+          "descendants.email": 1,
+          "descendants.designation": 1,
+          "descendants.department": 1,
+          "descendants.avatar": 1,
+          "descendants.reportingManager": 1,
+          "descendants.level": 1
+        }
+      }
+    ]);
+
+    if (!tree.length) return [];
+
+    const root = tree[0];
+    const descendants = root.descendants || [];
+
+    const childrenMap = new Map<string, any[]>();
+    descendants.forEach((d: any) => {
+      const parentId = d.reportingManager.toString();
+      if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
+      childrenMap.get(parentId)!.push(d);
+    });
+
+    const nestChildren = (node: any) => {
+      const nodeId = node._id.toString();
+      const directReports = childrenMap.get(nodeId) || [];
+      node.children = directReports.map(report => {
+        delete report.level;
+        return nestChildren(report);
+      });
+      return node;
+    };
+
+    return [nestChildren(root)];
   }
 
   static async getDirectReports(employeeId: string) {
@@ -105,10 +165,49 @@ export default class UserService {
     })
   }
 
-  static async assignReportingManager(userId: string, reportingManager: string) {
-    // tbd needs a little bit more than this should be recursive
-    return await this.model.find({
+  static async assignReportingManager(
+    userId: string,
+    proposedManagerId: string
+  ): Promise<{ success: boolean; message: string }> {
+    if (userId === proposedManagerId) {
+      return {
+        success: false,
+        message: "An employee cannot be assigned to report to themselves."
+      };
+    }
 
-    })
+    const checkCycles = async (currentCheckIds: string[]): Promise<boolean> => {
+      const subordinates = await this.model
+        .find({ reportingManager: { $in: currentCheckIds } })
+        .select("_id")
+        .lean();
+
+      if (subordinates.length === 0) return false;
+
+      const subordinateIds = subordinates.map(sub => sub._id.toString());
+
+      if (subordinateIds.includes(proposedManagerId)) {
+        return true;
+      }
+
+      return checkCycles(subordinateIds);
+    };
+
+    const willCreateCycle = await checkCycles([userId]);
+    if (willCreateCycle) {
+      return {
+        success: false,
+        message: "The selected reporting manager is down in this employee's hierarchy line. This change would create a cyclic reporting loop."
+      };
+    }
+
+    await this.model.findByIdAndUpdate(userId, {
+      $set: { reportingManager: proposedManagerId }
+    });
+
+    return {
+      success: true,
+      message: "Reporting manager updated successfully across target accounts."
+    };
   }
 }
