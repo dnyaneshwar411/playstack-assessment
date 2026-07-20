@@ -1,0 +1,9 @@
+services:
+  api:
+    build: ./server
+    restart: always
+    ports:
+      - "1993:1993"
+    env_file:
+      - ./server/.env
+    command: node dist/index.cjs

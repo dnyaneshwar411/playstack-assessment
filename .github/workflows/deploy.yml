@@ -27,7 +27,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: .
+          context: ./server
           file: ./server/Dockerfile
           push: true
           tags: ghcr.io/dnyaneshwar411/playstack-assessment:latest
@@ -38,13 +38,13 @@ jobs:
             mkdir -p ~/.ssh
             echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
 
-      # - name: Deploy using SCP
-      #   run: scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./docker-compose.prod.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/notification-engine
+      - name: Deploy using SCP
+        run: scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/notification-engine
 
       - name: Restart Server
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "cd /home/ubuntu/notification-engine && \
              echo '${{ secrets.GHCR_PAT }}' | docker login ghcr.io -u dnyaneshwar411 --password-stdin && \
-             docker-compose -f docker-compose.prod.yml pull && \
-             docker-compose -f docker-compose.prod.yml up -d --remove-orphans"
+             docker-compose -f docker-compose.yml pull && \
+             docker-compose -f docker-compose.yml up -d --remove-orphans"
