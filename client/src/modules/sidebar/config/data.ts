@@ -11,20 +11,24 @@ import {
   ScrollText,
   GalleryVerticalEnd,
   Sparkle,
+  UserCircle,
+  UserPlus,
+  GitBranch,
+  Shield,
 } from "lucide-react";
 import { WorkspaceSidebarData } from "./types.js";
 
 export const appSidebarData: WorkspaceSidebarData = {
   user: {
-    name: "John Doe",
-    email: "john@acme.com",
-    avatar: "/avatars/john.jpg",
+    name: "Admin User",
+    email: "admin@company.com",
+    avatar: "/avatars/admin.jpg",
   },
 
   workspaces: [
     {
-      name: "Acme Inc.",
-      logo: GalleryVerticalEnd,
+      name: "HR Management",
+      logo: Users,
       plan: "Enterprise",
     },
   ],
@@ -38,101 +42,36 @@ export const appSidebarData: WorkspaceSidebarData = {
     },
 
     {
-      title: "Providers",
-      url: "/providers",
-      icon: Sparkle,
+      title: "Organization",
+      url: "/organization/chart",
+      icon: GitBranch,
+      type: "link"
+    },
+
+    {
+      title: "My Profile",
+      url: "/profile",
+      icon: UserCircle,
       type: "link",
     },
 
     {
-      title: "Applications",
-      url: "/applications",
-      icon: Bot,
+      title: "Employees",
+      url: "/employees",
+      icon: Users,
       isActive: true,
       items: [
         {
-          title: "All Applications",
-          url: "/applications",
+          title: "All Employees",
+          url: "/employees",
         },
         {
-          title: "Create Application",
-          url: "/applications/new",
-        },
-      ],
-    },
-
-    {
-      title: "Executions",
-      url: "/executions",
-      icon: Activity,
-      items: [
-        {
-          title: "Execution History",
-          url: "/executions",
+          title: "Add Employee",
+          url: "/employees/new",
         },
         {
-          title: "Running Jobs",
-          url: "/executions/running",
-        },
-      ],
-    },
-
-    {
-      title: "Workspace",
-      url: "/workspace",
-      icon: Users,
-      items: [
-        {
-          title: "Members",
-          url: "/workspace/members",
-        },
-        {
-          title: "Permissions",
-          url: "/workspace/permissions",
-        },
-      ],
-    },
-
-    {
-      title: "Monitoring",
-      url: "/monitoring",
-      icon: ChartColumn,
-      items: [
-        {
-          title: "Usage",
-          url: "/monitoring/usage",
-        },
-        {
-          title: "Analytics",
-          url: "/monitoring/analytics",
-        },
-        {
-          title: "Audit Logs",
-          url: "/monitoring/audit",
-        },
-      ],
-    },
-
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "/settings/general",
-        },
-        {
-          title: "AI Providers",
-          url: "/settings/providers",
-        },
-        {
-          title: "API Keys",
-          url: "/settings/api-keys",
-        },
-        {
-          title: "Workspace",
-          url: "/settings/workspace",
+          title: "Direct Reports",
+          url: "/employees/direct-reports",
         },
       ],
     },
@@ -140,24 +79,24 @@ export const appSidebarData: WorkspaceSidebarData = {
 
   quickAccess: [
     {
-      name: "AI Providers",
-      url: "/settings/providers",
-      icon: Cpu,
+      name: "My Profile",
+      url: "/profile",
+      icon: UserCircle,
     },
     {
-      name: "API Keys",
-      url: "/settings/api-keys",
-      icon: KeyRound,
+      name: "Add Employee",
+      url: "/employees/new",
+      icon: UserPlus,
     },
     {
-      name: "Audit Logs",
-      url: "/monitoring/audit",
-      icon: ScrollText,
+      name: "Org Chart",
+      url: "/organization/chart",
+      icon: GitBranch,
     },
     {
-      name: "Permissions",
-      url: "/workspace/permissions",
-      icon: ShieldCheck,
+      name: "Manage Roles",
+      url: "/permissions/roles",
+      icon: Shield,
     },
   ],
 };

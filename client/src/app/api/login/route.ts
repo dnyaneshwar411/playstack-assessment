@@ -2,7 +2,7 @@ import { buildToastMessage } from "@/lib/catchAsync";
 import { makeRequest } from "@/network";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async function (req: NextRequest, res: NextResponse) {
+export const POST = async function (req: NextRequest) {
   try {
     const body = await req.json()
     const response = await makeRequest("/api/v1/auth/login", {

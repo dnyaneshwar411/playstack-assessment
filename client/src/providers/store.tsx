@@ -8,9 +8,7 @@ export type GlobalActions = {
 
 export type GlobalStore = GlobalState & GlobalActions
 
-export const defaultInitState: GlobalState = {
-  count: 0,
-}
+export const defaultInitState: GlobalState = {}
 
 export const createGlobalStore = (
   initState: GlobalState = defaultInitState,
