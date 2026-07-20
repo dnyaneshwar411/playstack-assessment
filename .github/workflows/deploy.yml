@@ -44,7 +44,7 @@ jobs:
       - name: Restart Server
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd /home/ubuntu/playstack-assessment && \
+            "cd /home/ec2-user/playstack-assessment && \
              echo '${{ secrets.GHCR_PAT }}' | docker login ghcr.io -u dnyaneshwar411 --password-stdin && \
              docker-compose -f docker-compose.yml pull && \
              docker-compose -f docker-compose.yml up -d --remove-orphans"
