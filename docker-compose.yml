@@ -1,6 +1,7 @@
 services:
   api:
-    build: ./server
+    build: ghcr.io/dnyaneshwar411/playstack-assessment:latest
+    container_name: api
     restart: always
     ports:
       - "1993:1993"
