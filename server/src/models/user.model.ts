@@ -60,7 +60,7 @@ const userSchema = new Schema({
     },
     key: {
       type: String,
-      required: true
+      // required: true
     }
   }
 }, { timestamps: true });

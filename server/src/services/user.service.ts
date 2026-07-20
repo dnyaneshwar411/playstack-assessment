@@ -21,12 +21,71 @@ type OrgTreeNode = {
 export default class UserService {
   private static model = User;
 
+  static async dashboard() {
+    const [metrics] = await User.aggregate([
+      {
+        $facet: {
+          stats: [
+            {
+              $group: {
+                _id: null,
+                totalEmployees: { $sum: 1 },
+                activeEmployees: {
+                  $sum: { $cond: [{ $eq: ["$status", "Active"] }, 1, 0] }
+                },
+                inactiveEmployees: {
+                  $sum: { $cond: [{ $eq: ["$status", "In Active"] }, 1, 0] }
+                }
+              }
+            }
+          ],
+          departmentBreakdown: [
+            {
+              $group: {
+                _id: "$department",
+                count: { $sum: 1 }
+              }
+            }
+          ],
+          recentHiresLog: [
+            { $sort: { joiningDate: -1 } },
+            { $limit: 5 },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                email: 1,
+                department: 1,
+                designation: 1,
+                status: 1
+              }
+            }
+          ]
+        }
+      }
+    ]);
+
+    const baseStats = metrics?.stats?.[0] || { totalEmployees: 0, activeEmployees: 0, inactiveEmployees: 0 };
+    const departments = metrics?.departmentBreakdown || [];
+    const recentHires = metrics?.recentHiresLog || [];
+
+    return {
+      summary: {
+        totalEmployees: baseStats.totalEmployees,
+        activeEmployees: baseStats.activeEmployees,
+        inactiveEmployees: baseStats.inactiveEmployees,
+        departmentCount: departments.length
+      },
+      departments,
+      recentHires
+    };
+  }
+
   static async paginate(filters: PaginationOptions) {
     const dbQuery: Record<string, object> = {}
-    if (typeof filters.query === "string") {
-      dbQuery.name = { $regex: filters.query, options: "i" }
-      dbQuery.email = { $regex: filters.query, options: "i" }
-      dbQuery.mobileNumber = { $regex: filters.query, options: "i" }
+    if (typeof filters.query === "string" && filters.query.length > 3) {
+      dbQuery.name = { $regex: filters.query, $options: "i" }
+      dbQuery.email = { $regex: filters.query, $options: "i" }
     }
 
     const [employees, total] = await Promise.all([
@@ -82,10 +141,19 @@ export default class UserService {
     }
   }
 
+  static async retrieveEmployeeById(employeeId: string) {
+    const [profile, scopeMap] = await Promise.all([
+      this.model.findById(employeeId),
+      ScopeService.getByUserId(employeeId)
+    ])
+    return { profile, scopeMap }
+  }
+
   static async createEmployee(payload: z.infer<typeof UserValidation.register>["body"]) {
     const userBody = new this.model(payload);
     userBody.password = await hashString(payload.password);;
     if (userBody.avatar) userBody.avatar.private = false;
+    userBody.employeeId = await this.generateEmployeeId()
     return await this.model.create(userBody);
   }
 
@@ -104,31 +172,34 @@ export default class UserService {
 
   static async buildOrganizationTree(rootId: string, maxDepth: number = Infinity): Promise<any[]> {
     const tree = await this.model.aggregate([
+      // 1. Target the root employee
       { $match: { _id: new Types.ObjectId(rootId), status: "Active" } },
 
+      // 2. Fetch downstream employees dynamically up to the maxDepth threshold
       {
         $graphLookup: {
-          from: "users",
+          from: "users", // Ensure this matches your collection name
           startWith: "$_id",
           connectFromField: "_id",
           connectToField: "reportingManager",
-          as: "descendants",
-          maxDepth: maxDepth - 1,
+          as: "__internal_flat_list__", // Hidden internal name
+          maxDepth: maxDepth - 1,       // 0 means immediate children only
           depthField: "level"
         }
       },
 
+      // 3. Project only the clean metadata fields needed
       {
         $project: {
-          name: 1, email: 1, designation: 1, department: 1, avatar: 1,
-          "descendants._id": 1,
-          "descendants.name": 1,
-          "descendants.email": 1,
-          "descendants.designation": 1,
-          "descendants.department": 1,
-          "descendants.avatar": 1,
-          "descendants.reportingManager": 1,
-          "descendants.level": 1
+          name: 1, email: 1, designation: 1, department: 1, avatar: 1, reportingManager: 1,
+          "__internal_flat_list__._id": 1,
+          "__internal_flat_list__.name": 1,
+          "__internal_flat_list__.email": 1,
+          "__internal_flat_list__.designation": 1,
+          "__internal_flat_list__.department": 1,
+          "__internal_flat_list__.avatar": 1,
+          "__internal_flat_list__.reportingManager": 1,
+          "__internal_flat_list__.level": 1
         }
       }
     ]);
@@ -136,26 +207,38 @@ export default class UserService {
     if (!tree.length) return [];
 
     const root = tree[0];
-    const descendants = root.descendants || [];
+    const flatList = root.__internal_flat_list__ || [];
 
+    // 4. Map the flat records by their manager for O(N) structural lookups
     const childrenMap = new Map<string, any[]>();
-    descendants.forEach((d: any) => {
-      const parentId = d.reportingManager.toString();
-      if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
-      childrenMap.get(parentId)!.push(d);
+    flatList.forEach((employee: any) => {
+      const parentId = employee.reportingManager?.toString();
+      if (parentId) {
+        if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
+        childrenMap.get(parentId)!.push(employee);
+      }
     });
 
+    // 5. Recursively assemble the structure using ONLY the 'children' key
     const nestChildren = (node: any) => {
       const nodeId = node._id.toString();
       const directReports = childrenMap.get(nodeId) || [];
+
       node.children = directReports.map(report => {
-        delete report.level;
-        return nestChildren(report);
+        const cleanReport = { ...report };
+        delete cleanReport.level; // Remove structural helper fields
+        return nestChildren(cleanReport);
       });
+
       return node;
     };
 
-    return [nestChildren(root)];
+    const finalTree = nestChildren(root);
+
+    // 6. Erase the temporary flat list completely so it never leaks to the client
+    delete finalTree.__internal_flat_list__;
+
+    return [finalTree];
   }
 
   static async getDirectReports(employeeId: string) {

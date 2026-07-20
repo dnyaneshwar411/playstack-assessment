@@ -14,7 +14,7 @@ mongoose
   .then(() => {
     console.log("db connected");
     server = app.listen(env.EXPRESS_PORT, () => {
-      console.log("server running");
+      console.log("server running on port", env.EXPRESS_PORT);
     });
   })
   .catch((error) => {

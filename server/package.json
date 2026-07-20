@@ -8,18 +8,12 @@
     "dev": "tsx watch src/index.ts",
     "seed": "tsx src/seed/index.ts",
     "clean": "rm -rf dist",
-    "build": "pnpm run clean && esbuild src/index.ts src/workers/init.ts --bundle --platform=node --target=node24 --outdir=dist --outbase=src"
+    "build": "pnpm run clean && esbuild src/index.ts --bundle --platform=node --target=node24 --outbase=src --format=cjs --outfile=dist/index.cjs",
+    "start": "node dist/index.cjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.5.2",
-      "onFail": "download"
-    }
-  },
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.5.0",
@@ -40,6 +34,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "esbuild": "^0.28.1",
     "express": "^5.2.1",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",

@@ -26,7 +26,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\"email\":\"sarah.jenkins@company.com\",\"password\":\"123456\"}",
+              "raw": "{\"email\":\"tina19@yahoo.com\",\"password\":\"muyaxisoju\"}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -106,6 +106,53 @@
           }
         },
         {
+          "id": "d8c0d5d6-c66a-43da-82cc-681a70f6c30a",
+          "name": "organization tree",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/organization/tree?node=65cb00014f1a2b3c4d5e6f01&depth=20",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "organization",
+                "tree"
+              ],
+              "query": [
+                {
+                  "key": "node",
+                  "value": "65cb00014f1a2b3c4d5e6f01"
+                },
+                {
+                  "key": "depth",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "951b666a-9085-49cd-b461-0a8b275ce57c",
+          "name": "profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/me",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            }
+          }
+        },
+        {
           "id": "b396e3c0-0d72-4333-98fe-dd4470576a04",
           "name": "register user",
           "request": {
@@ -152,6 +199,34 @@
             "body": {
               "mode": "raw",
               "raw": "{\"name\":\"Alex Mercer\",\"email\":\"john.doe@company.com\",\"mobileNumber\":9876543210,\"role\":\"Employee\",\"department\":\"Employee\",\"designation\":\"Software Engineer\",\"salary\":85000,\"status\":\"Active\",\"joiningDate\":\"2026-07-18T00:00:00.000Z\",\"avatar\":{\"private\":false,\"key\":\"uploads/avatars/alex-mercer-profile.jpg\"}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "aac0acd4-5e64-41bf-b5ab-0392374ea1c2",
+          "name": "update reporting manager",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{LOCAL}}/user/65cb00024f1a2b3c4d5e6f02/manager",
+              "host": [
+                "{{LOCAL}}"
+              ],
+              "path": [
+                "user",
+                "65cb00024f1a2b3c4d5e6f02",
+                "manager"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reportingManager\":\"65cb00014f1a2b3c4d5e6f01\"}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -217,59 +292,20 @@
           }
         },
         {
-          "id": "d8c0d5d6-c66a-43da-82cc-681a70f6c30a",
-          "name": "organization tree",
+          "id": "983581bf-2b6d-46c9-ac0b-626b842dbdc5",
+          "name": "dashboard",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{LOCAL}}/user/organization/tree?node=65cb00014f1a2b3c4d5e6f01&depth=20",
+              "raw": "{{LOCAL}}/user/dashboard",
               "host": [
                 "{{LOCAL}}"
               ],
               "path": [
                 "user",
-                "organization",
-                "tree"
-              ],
-              "query": [
-                {
-                  "key": "node",
-                  "value": "65cb00014f1a2b3c4d5e6f01"
-                },
-                {
-                  "key": "depth",
-                  "value": "20"
-                }
+                "dashboard"
               ]
-            }
-          }
-        },
-        {
-          "id": "aac0acd4-5e64-41bf-b5ab-0392374ea1c2",
-          "name": "update reporting manager",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "url": {
-              "raw": "{{LOCAL}}/user/65cb00024f1a2b3c4d5e6f02/manager",
-              "host": [
-                "{{LOCAL}}"
-              ],
-              "path": [
-                "user",
-                "65cb00024f1a2b3c4d5e6f02",
-                "manager"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\"reportingManager\":\"65cb00014f1a2b3c4d5e6f01\"}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
             }
           }
         }

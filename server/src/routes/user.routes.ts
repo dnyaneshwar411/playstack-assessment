@@ -6,9 +6,15 @@ import UserValidation from "../validators/user.validation.js";
 
 const userRoutes: express.Router = express.Router();
 
+userRoutes.route("/dashboard")
+  .get(hasAccess(), UserController.dashboard)
+
+userRoutes.route("/me")
+  .get(hasAccess(["user:read:own"]), UserController.myProfile)
+
 userRoutes
   .route("/employees")
-  .get(hasAccess(["user:read:own"]), UserController.retrieveEmployees)
+  .get(hasAccess(["user:read:all"]), UserController.retrieveEmployees)
   .post(
     validate(UserValidation.register),
     hasAccess(["user:create:all"]),
@@ -17,6 +23,7 @@ userRoutes
 
 userRoutes
   .route("/employees/:employeeId")
+  .get(validate(UserValidation.paramMongoObjectId("employeeId")), hasAccess(["user:read:all"]), UserController.retrieveEmployeeById)
   .post(
     validate(UserValidation.update),
     hasAccess(["user:update:all", "user:update:own"]),
@@ -30,7 +37,7 @@ userRoutes
 
 userRoutes
   .route("/organization/tree")
-  .get(validate(UserValidation.organizationTree), hasAccess([]), UserController.organizationTree);
+  .get(validate(UserValidation.organizationTree), hasAccess(), UserController.organizationTree);
 
 userRoutes
   .route("/:userId/subordinates")

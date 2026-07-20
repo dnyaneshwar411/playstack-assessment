@@ -7,7 +7,7 @@ export default class UserValidation {
 
   private static avatarSchema = z.object({
     private: z.boolean().default(false),
-    key: z.string({ message: "Avatar storage key is required" }).trim().min(1)
+    key: z.string().trim()
   });
 
   static paramMongoObjectId = (field: string) => {

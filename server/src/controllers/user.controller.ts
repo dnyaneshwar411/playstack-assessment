@@ -8,12 +8,39 @@ import { ApiError } from "../utils/apiError.js"
 import ScopeService from "../services/scope.service.js"
 
 export default class UserController {
+  static dashboard = catchAsync(
+    async function (_: Request, res: Response) {
+      const data = await UserService.dashboard()
+      res.status(200).json({ code: httpStatus.OK, data })
+    }
+  )
+
+  static myProfile = catchAsync(
+    async function (req: Request, res: Response) {
+      res.status(200).json({
+        code: httpStatus.OK,
+        data: {
+          ...req.user,
+          scopeMap: req.scopes
+        }
+      })
+    }
+  )
+
   static retrieveEmployees = catchAsync(
     async function (req: Request, res: Response) {
       const pagination = buildPaginationFilters<{}, { total?: number }>(req.query as PaginationQueryOptions);
       const { employees, total } = await UserService.paginate(pagination);
       pagination.total = total;
       res.status(httpStatus.OK).json({ code: httpStatus.OK, data: employees, pagination });
+    }
+  )
+
+  static retrieveEmployeeById = catchAsync(
+    async function (req: Request, res: Response) {
+      const { employeeId } = req.params
+      const data = await UserService.retrieveEmployeeById(employeeId as string);
+      res.status(200).json({ code: 200, data })
     }
   )
 
