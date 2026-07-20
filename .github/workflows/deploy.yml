@@ -24,6 +24,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
+          context: .
+          file: ./server/Dockerfile
           push: true
           tags: ghcr.io/dnyaneshwar411/playstack-assessment:latest
 
