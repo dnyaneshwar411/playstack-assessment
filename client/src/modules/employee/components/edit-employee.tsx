@@ -182,7 +182,6 @@ export default function EditEmployee({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Avatar Upload */}
             <div className="flex items-center gap-4">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={avatarPreview} />
@@ -203,7 +202,6 @@ export default function EditEmployee({
               </div>
             </div>
 
-            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -218,7 +216,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -233,7 +230,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Mobile Number */}
             <FormField
               control={form.control}
               name="mobileNumber"
@@ -253,7 +249,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Role - Non-editable */}
             <FormField
               control={form.control}
               name="role"
@@ -268,7 +263,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Department */}
             <FormField
               control={form.control}
               name="department"
@@ -301,7 +295,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Designation */}
             <FormField
               control={form.control}
               name="designation"
@@ -316,7 +309,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Salary */}
             <FormField
               control={form.control}
               name="salary"
@@ -336,7 +328,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Status */}
             <FormField
               control={form.control}
               name="status"
@@ -363,7 +354,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Joining Date */}
             <FormField
               control={form.control}
               name="joiningDate"
@@ -386,7 +376,6 @@ export default function EditEmployee({
               )}
             />
 
-            {/* Actions */}
             <div className="flex justify-end gap-2 pt-4 border-t">
               <Button
                 type="button"

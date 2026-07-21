@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { format } from "date-fns"
-// --- shadcn/ui Component Imports ---
 import {
   Form,
   FormControl,
@@ -48,15 +47,8 @@ const employeeFormSchema = z.object({
     .min(6, "Password must be at least 6 characters long"),
   name: z.string().trim(),
 
-  // Validates as string in the form, converted to integer on submit
   mobileNumber: z
     .string(),
-  // .trim()
-  // .optional()
-  // .refine(
-  //   (val) => !val || /^\d+$/.test(val),
-  //   "Must be a valid positive integer"
-  // ),
 
   department: z.enum(DEPARTMENTS, {
     message: "Please select a department",
@@ -66,15 +58,8 @@ const employeeFormSchema = z.object({
   status: z.enum(USER_STATUSES),
   joiningDate: z.string(),
 
-  // Validates as string in the form, converted to float on submit
   salary: z
     .string()
-  // .trim()
-  // .optional()
-  // .refine(
-  //   (val) => !val || (!isNaN(Number(val)) && Number(val) > 0),
-  //   "Must be a positive number"
-  // ),
 })
 
 type EmployeeFormValues = z.infer<typeof employeeFormSchema>
@@ -83,7 +68,6 @@ export default function AddEmployeePage() {
   const router = useRouter()
   const [globalError, setGlobalError] = useState<string | null>(null)
 
-  // Initialize React Hook Form with strict type inference
   const form = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeFormSchema),
     defaultValues: {

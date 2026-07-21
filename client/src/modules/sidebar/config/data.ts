@@ -1,16 +1,6 @@
 import {
-  Bot,
   LayoutDashboard,
   Users,
-  ShieldCheck,
-  Activity,
-  Settings2,
-  Cpu,
-  KeyRound,
-  ChartColumn,
-  ScrollText,
-  GalleryVerticalEnd,
-  Sparkle,
   UserCircle,
   UserPlus,
   GitBranch,
@@ -40,38 +30,41 @@ export const appSidebarData: WorkspaceSidebarData = {
       icon: LayoutDashboard,
       type: "link",
     },
-
     {
       title: "Organization",
       url: "/organization/chart",
       icon: GitBranch,
-      type: "link"
+      type: "link",
     },
-
     {
       title: "My Profile",
       url: "/profile",
       icon: UserCircle,
       type: "link",
+      scope: "user:read:own",
     },
-
     {
       title: "Employees",
       url: "/employees",
       icon: Users,
+      type: "collapsible",
       isActive: true,
+      scope: ["user:read:all", "user:create:all"],
       items: [
         {
           title: "All Employees",
           url: "/employees",
+          scope: "user:read:all",
         },
         {
           title: "Add Employee",
           url: "/employees/new",
+          scope: "user:create:all",
         },
         {
           title: "Direct Reports",
           url: "/employees/direct-reports",
+          scope: "user:read:all",
         },
       ],
     },

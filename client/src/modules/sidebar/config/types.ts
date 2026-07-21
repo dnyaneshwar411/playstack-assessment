@@ -15,6 +15,7 @@ export type Workspace = {
 export type NavSubItem = {
   title: string;
   url: string;
+  scope?: string | string[];
 }
 
 export type BaseNavItem = {
@@ -22,16 +23,19 @@ export type BaseNavItem = {
   url: string;
   icon: LucideIcon;
   isActive?: boolean;
+  scope?: string | string[];
 }
 
 export type LinkNavItem = BaseNavItem & {
   type: "link";
   items?: never;
+  scope?: string | string[];
 }
 
 export type CollapsibleNavItem = BaseNavItem & {
   type?: "collapsible";
   items: NavSubItem[];
+  scope?: string | string[];
 }
 
 export type NavItem = LinkNavItem | CollapsibleNavItem;

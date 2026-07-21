@@ -28,6 +28,15 @@ interface NavMainProps {
 export function NavMain({ items }: NavMainProps) {
   const pathname = usePathname()
 
+  const isPathActive = (url: string, isExactOnly: boolean = false) => {
+    if (!url) return false
+    if (pathname === url) return true
+    if (!isExactOnly && url !== "/" && pathname?.startsWith(url + "/")) {
+      return true
+    }
+    return false
+  }
+
   return (
     <SidebarGroup className="py-2">
       <SidebarGroupLabel className="text-[10px] font-semibold tracking-wider text-sidebar-foreground/40 uppercase mb-2 px-2">
@@ -36,11 +45,11 @@ export function NavMain({ items }: NavMainProps) {
       <SidebarMenu className="gap-0.5">
         {items.map((item) => {
           const isChildActive = item.items?.some(
-            (subItem) => pathname === subItem.url || pathname?.startsWith(subItem.url + "/")
+            (subItem) => isPathActive(subItem.url)
           )
 
           if (item.type === "link" || !item.items || item.items.length === 0) {
-            const isActive = pathname === item.url || pathname?.startsWith(item.url + "/")
+            const isActive = isPathActive(item.url)
 
             return (
               <SidebarMenuItem key={item.title}>
@@ -85,12 +94,11 @@ export function NavMain({ items }: NavMainProps) {
                     <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-sidebar-foreground/30 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
-                
+
                 <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                  {/* Clean nested items aligned to shadcn defaults without heavy custom track borders */}
                   <SidebarMenuSub className="mx-0 my-0.5 pl-9 pr-0 border-none space-y-0.5">
                     {item.items.map((subItem: { title: string; url: string }) => {
-                      const isSubActive = pathname === subItem.url || pathname?.startsWith(subItem.url + "/")
+                      const isSubActive = isPathActive(subItem.url, true)
 
                       return (
                         <SidebarMenuSubItem key={subItem.title}>
